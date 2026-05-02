@@ -273,14 +273,14 @@ EXIT
 To prevent the VM from running out of disk space over time, you can set a **Retention Policy**. For example, to keep data only for 30 days:
 
 ```sql
-CREATE RETENTION POLICY "30_days_retention" ON "sensors_data" DURATION 30d REPLICATION 1 DEFAULT
+CREATE RETENTION POLICY "30_days_retention" ON "iot_sensors" DURATION 30d REPLICATION 1 DEFAULT
 ```
 
 ### 5. Verification
 Once your ESP32 is running and Telegraf is active, you can verify that data is actually being stored by running:
 
 ```bash
-influx -database 'sensors_data' -execute 'SELECT * FROM readings_sensors LIMIT 10'
+influx -database 'iot_sensors' -execute 'SELECT * FROM readings_sensors LIMIT 10'
 ```
 
 <img width="1285" height="280" alt="Screenshot 2026-04-30 at 8 35 56 p m" src="https://github.com/user-attachments/assets/730ec4a4-9ea0-4e7b-af63-c3506e89a4e3" />
