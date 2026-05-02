@@ -15,18 +15,19 @@ The architecture is distributed across the IoT edge (sensors), a messaging and b
 
 ```mermaid
 graph TB
-    subgraph IoT_Layer ["IoT Edge Layer"]
-        ESP1["🌡️/🎤 ESP32 Node 1<br>Temp, Humidity, Sound"]
-        ESP2["🌡️/🎤 ESP32 Node 2<br>Temp, Humidity, Sound"]
-    end
+    INTERNET["🌐 Internet"]
 
     subgraph GCP_Cloud ["☁️ Google Cloud Platform (VPC)"]
+        FW["🛡️ VPC Firewall<br>Allow 1883, 3000"]
+        
         subgraph PUB_SUB ["Public Subnet"]
             subgraph VM1 ["🖥️ VM 1: Broker & Viz"]
-                MOSQ["🦟 Mosquitto MQTT Broker<br>Port: 1883<br>Auth: Credentials"]
+                MOSQ["散 Mosquitto MQTT Broker<br>Port: 1883<br>Auth: Credentials"]
                 GRAF["📊 Grafana<br>Port: 3000<br>Unified Alerting"]
             end
         end
+
+        NAT["🔀 Cloud NAT"]
 
         subgraph PRIV_SUB ["Private Subnet"]
             subgraph VM2 ["🖥️ VM 2: Data Pipeline"]
@@ -36,15 +37,24 @@ graph TB
         end
     end
 
-    %% Flow Connections
-    ESP1 -- "MQTT JSON Payload<br>TCP 1883" --> MOSQ
-    ESP2 -- "MQTT JSON Payload<br>TCP 1883" --> MOSQ
+    subgraph IoT_Layer ["IoT Edge Layer"]
+        ESP1["🌡️/🎤 ESP32 Node 1<br>Temp, Humidity, Sound"]
+        ESP2["🌡️/🎤 ESP32 Node 2<br>Temp, Humidity, Sound"]
+    end
 
-    MOSQ -- "Internal Network" --> TEL
+    %% Flow Connections
+    INTERNET -- "Web Access (3000)" --> FW
+    IoT_Layer -- "MQTT (1883)" --> FW
+    FW --> VM1
+
+    VM1 -- "Internal Network" --> VM2
     TEL -- "Line Protocol" --> DB
     DB -- "Internal Query<br>TCP 8086" --> GRAF
     
-    GRAF -. "Alerts / Notifications<br>Telegram / Email" .-> IoT_Layer
+    VM2 -- "Outbound Updates" --> NAT
+    NAT -- "Internet Access" --> INTERNET
+    
+    GRAF -. "Alerts / Notifications" .-> INTERNET
 
     %% Component Styles
     style GCP_Cloud fill:#e8f0fe,stroke:#4285F4,stroke-width:2px,color:#1a1a2e
@@ -52,6 +62,9 @@ graph TB
     style PRIV_SUB fill:#fce8e6,stroke:#EA4335,stroke-width:2px,color:#1a1a2e
     style VM1 fill:#ffffff,stroke:#F9AB00,stroke-dasharray: 5 5
     style VM2 fill:#ffffff,stroke:#EA4335,stroke-dasharray: 5 5
+    style FW fill:#FDD835,stroke:#F9A825,color:#1a1a2e
+    style NAT fill:#AB47BC,stroke:#8E24AA,color:#fff
+    style INTERNET fill:#607D8B,stroke:#455A64,color:#fff
     style ESP1 fill:#4CAF50,stroke:#388E3C,color:#fff
     style ESP2 fill:#4CAF50,stroke:#388E3C,color:#fff
     style MOSQ fill:#FF7043,stroke:#E64A19,color:#fff
