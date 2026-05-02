@@ -174,6 +174,8 @@ The configuration is handled via a single file. We will configure the input (MQT
 Edit the configuration file:
 ```bash
 sudo nano /etc/telegraf/telegraf.conf
+or
+sudo nano /etc/telegraf/telegraf.d/mqtt_to_influx.conf
 ```
 
 #### A. Output Configuration (InfluxDB)
