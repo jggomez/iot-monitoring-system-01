@@ -22,7 +22,7 @@ graph TB
         
         subgraph PUB_SUB ["Public Subnet"]
             subgraph VM1 ["🖥️ VM 1: Broker & Viz"]
-                MOSQ["散 Mosquitto MQTT Broker<br>Port: 1883<br>Auth: Credentials"]
+                MOSQ["🦟 Mosquitto MQTT Broker<br>Port: 1883<br>Auth: Credentials"]
                 GRAF["📊 Grafana<br>Port: 3000<br>Unified Alerting"]
             end
         end
@@ -47,7 +47,9 @@ graph TB
     IoT_Layer -- "MQTT (1883)" --> FW
     FW --> VM1
 
-    VM1 -- "Internal Network" --> VM2
+    %% -- RELATIONSHIP FIXED HERE --
+    MOSQ -- "Internal Network<br>Port 1883" --> TEL
+    
     TEL -- "Line Protocol" --> DB
     DB -- "Internal Query<br>TCP 8086" --> GRAF
     
