@@ -97,6 +97,8 @@ sudo apt update
 sudo apt install mosquitto mosquitto-clients -y
 ```
 
+<img width="1643" height="368" alt="Screenshot 2026-04-30 at 1 42 34 p m" src="https://github.com/user-attachments/assets/9b289bf0-01fa-40ec-908b-df5eece7eb76" />
+
 ### 2. Configuration
 To secure the broker and allow external connections from your ESP32 nodes, create a configuration file:
 
@@ -143,6 +145,8 @@ sudo systemctl status mosquitto
 ```
 
 > **Note on Connectivity:** Since this VM is on a **GCP Public Subnet**, ensure that you have configured the **VPC Firewall rules** in the Google Cloud Console to allow inbound traffic on **TCP port 1883**.
+
+<img width="1436" height="859" alt="Screenshot 2026-04-30 at 2 40 23 p m" src="https://github.com/user-attachments/assets/51d79d22-aaae-47fc-9db7-7c2b4cf7f70d" />
 
 ---
 
@@ -275,6 +279,8 @@ Once your ESP32 is running and Telegraf is active, you can verify that data is a
 influx -database 'sensors_data' -execute 'SELECT * FROM readings_sensors LIMIT 10'
 ```
 
+<img width="1285" height="280" alt="Screenshot 2026-04-30 at 8 35 56 p m" src="https://github.com/user-attachments/assets/730ec4a4-9ea0-4e7b-af63-c3506e89a4e3" />
+
 ---
 
 ### Security Note
@@ -301,6 +307,8 @@ echo "deb [signed-by=/usr/share/keyrings/grafana.gpg] https://apt.grafana.com/os
 sudo apt-get update && sudo apt-get install grafana -y
 ```
 
+<img width="1186" height="325" alt="Screenshot 2026-05-01 at 10 55 52 a m" src="https://github.com/user-attachments/assets/cc131d41-4233-4936-979c-c7c9b8aaa973" />
+
 ### 2. Service Management
 Ensure Grafana starts automatically on boot:
 
@@ -314,6 +322,12 @@ sudo systemctl enable grafana-server
 * **Default Credentials:** User: `admin` / Password: `admin` (You will be prompted to change it immediately).
 
 > **Important:** Ensure the **VPC Firewall** allows inbound traffic on **Port 3000**.
+
+<img width="1543" height="754" alt="Screenshot 2026-05-01 at 6 14 03 p m" src="https://github.com/user-attachments/assets/8ceffcd6-d2b8-4f24-80ea-94542cd474f3" />
+
+-----
+
+<img width="1543" height="604" alt="Screenshot 2026-05-01 at 6 14 15 p m" src="https://github.com/user-attachments/assets/9a66b19b-79bd-4d97-903b-c17fabe4b2bf" />
 
 ### 4. Connecting InfluxDB as a Data Source
 Inside the Grafana UI:
@@ -329,6 +343,12 @@ This project implements three types of proactive notifications:
 1.  **Threshold (Static):** Triggers if the temperature exceeds **30°C** for more than 5 minutes.
 2.  **Range (Environmental Comfort):** Triggers if the humidity falls outside the **40% - 60%** range, indicating a poor environment for concentration.
 3.  **Absence (Heartbeat):** Crucial for IoT. Triggers if no data is received from the ESP32 for over **10 minutes**, notifying that the sensor is offline.
+
+<img width="591" height="477" alt="Screenshot 2026-05-01 at 6 13 00 p m" src="https://github.com/user-attachments/assets/d34390a1-6cb8-4b53-a910-de07d1379c69" />
+
+----
+
+<img width="1259" height="405" alt="Screenshot 2026-05-01 at 6 12 42 p m" src="https://github.com/user-attachments/assets/9fb6d758-5cb3-4713-9ffd-2262551db144" />
 
 ---
 
@@ -373,6 +393,15 @@ When moving from Wokwi to a physical ESP32, ensure you:
 3.  **Secure the Broker:** Update your `secrets.h` with the public IP of your VM 1 and the specific credentials created during the Mosquitto setup.
 
 ---
+
+<img width="917" height="691" alt="Screenshot 2026-04-30 at 8 35 48 p m" src="https://github.com/user-attachments/assets/d9bf454e-2cd4-46eb-8f02-cc728f96bbea" />
+
+---
+
+## Author
+
+* **Juan Guillermo Gómez**
+* Linkedin: [@jggomezt](https://www.linkedin.com/in/jggomezt/)
 
 
 
